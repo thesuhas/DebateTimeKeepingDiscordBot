@@ -82,11 +82,11 @@ async def speech(ctx):
         if (deb.format != 'NA'):
             await ctx.send(f"I now invite the {deb.speaker} for their speech")
             index = speakers[deb.format].index(deb.speaker)
-            await asyncio.sleep(5)
+            await asyncio.sleep(60)
             await ctx.send("Protected time is done")
-            await asyncio.sleep(5)
+            await asyncio.sleep(5 * 60)
             await ctx.send("Protected time has started")
-            await asyncio.sleep(5)
+            await asyncio.sleep(80)
             await ctx.send("Time up!")
             # If it is not the last speaker
             if index != len(speakers[deb.format]) - 1:
