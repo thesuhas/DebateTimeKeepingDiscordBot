@@ -17,5 +17,11 @@ Sets the format of the debate to either an AP or BP depending on the author's pr
 ### .speech
 Starts the next speech.
 
+### .stop
+Lets a speaker stop their speech if they have finished before 7:20
+
+### .restart 
+Lets a speaker restart their speech
+
 ### .help
 DM's the author a list of commands
