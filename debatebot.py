@@ -7,11 +7,29 @@ client.remove_command('help')
 
 # Creating a debate class
 class Debate:
-    def __init__(self, status=False, format="NA", reply="NA", speaker='PM'):
+    def __init__(self, status=False, format="NA", reply="NA", speaker='PM', restart = False, speech = False):
         self.status = status
         self.format = format
         self.reply = reply
         self.speaker = speaker
+        self.restart = restart
+        self.speech = False
+
+def make_sleep():
+    async def sleep(delay, result=None, *, loop=None):
+        coro = asyncio.sleep(delay, result=result, loop=loop)
+        task = asyncio.ensure_future(coro)
+        sleep.tasks.add(task)
+        try:
+            return await task
+        except asyncio.CancelledError:
+            return result
+        finally:
+            sleep.tasks.remove(task)
+
+    sleep.tasks = set()
+    sleep.cancel_all = lambda: sum(task.cancel() for task in sleep.tasks)
+    return sleep
 
 @client.event
 async def on_ready():
@@ -68,6 +86,9 @@ async def end(ctx):
         deb.format = 'NA'
         deb.reply = 'NA'
         deb.speaker = 'PM'
+        deb.restart = False
+        sleep.cancel_all()
+        await asyncio.wait(sleep.tasks)
         await ctx.send(f"Debate has been ended by {ctx.author.mention}")
     else:
         await ctx.send("No debate going on")
@@ -76,31 +97,62 @@ async def end(ctx):
 async def speech(ctx):
     global deb
     global speakers
+    # If speech has been restarted
+    if deb.restart == True:
+        deb.restart = False
     # If debate has started
     if (deb.status == True):
         # If format has been set
         if (deb.format != 'NA'):
-            await ctx.send(f"I now invite the {deb.speaker} for their speech")
-            index = speakers[deb.format].index(deb.speaker)
-            await asyncio.sleep(60)
-            await ctx.send("Protected time is done")
-            await asyncio.sleep(5 * 60)
-            await ctx.send("Protected time has started")
-            await asyncio.sleep(80)
-            await ctx.send("Time up!")
-            # If it is not the last speaker
-            if index != len(speakers[deb.format]) - 1:
-                deb.speaker = speakers[deb.format][index + 1]
-            elif index == len(speakers[deb.format]) - 1:
-                deb.status = False
-                deb.speaker = 'PM'
-                deb.format = 'NA'
-                deb.reply = 'NA'
-                await ctx.send("The debate has finished")
+            # If a speech has not been started
+            if deb.speech == False:
+                await ctx.send(f"I now invite the {deb.speaker} for their speech")
+                deb.speech = True
+                index = speakers[deb.format].index(deb.speaker)
+                await sleep(5)
+                if deb.status == True and deb.restart == False:
+                    await ctx.send("Protected time is done")
+                    await sleep(5)
+                    if deb.status == True and deb.restart == False:
+                        await ctx.send("Protected time has started")
+                        await sleep(5)
+                        if deb.status == True and deb.restart == False:
+                            await ctx.send("Time up!")
+                # If it is not the last speaker
+                if (deb.status == True) and deb.restart == False:
+                    if index != len(speakers[deb.format]) - 1:
+                        deb.speaker = speakers[deb.format][index + 1]
+                    elif index == len(speakers[deb.format]) - 1:
+                        deb.status = False
+                        deb.speaker = 'PM'
+                        deb.format = 'NA'
+                        deb.reply = 'NA'
+                        await ctx.send("The debate has finished")
+            else:
+                await ctx.send(f"{deb.speaker} has already started their speech")
         else:
             await ctx.send("The format has not been set. Please set it with `.format`")
     else:
         await ctx.send("The debate has not started. Please set it with `.start`")
+
+@client.command()
+async def restart(ctx):
+    global deb
+    # Can only restart a speech if a speech is going on
+    if deb.speech == True:
+        deb.restart = True
+        deb.speech = False
+        sleep.cancel_all()
+        await asyncio.wait(sleep.tasks)
+        await ctx.send(f"The {deb.speaker} may restart their speech")
+    else:
+        await ctx.send("No one is speaking")
+
+@client.command()
+async def restart_status(ctx):
+    global deb
+    await ctx.send(deb.restart)
+
 
 @client.command()
 async def status(ctx):
@@ -118,4 +170,5 @@ async def status(ctx):
         await ctx.message.author.send(embed=embed)
 
 
+sleep = make_sleep()
 client.run('NzUyODg5MzI2Mzc0ODc5MjU2.X1eM0w._JppyqlGEnZqDop2prNeJtYnPJs')
