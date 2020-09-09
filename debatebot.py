@@ -118,6 +118,8 @@ async def speech(ctx):
                         await sleep(5)
                         if deb.status == True and deb.restart == False:
                             await ctx.send("Time up!")
+                            # Need to set speech to false after speech is done
+                            deb.speech = False
                 # If it is not the last speaker
                 if (deb.status == True) and deb.restart == False:
                     if index != len(speakers[deb.format]) - 1:
