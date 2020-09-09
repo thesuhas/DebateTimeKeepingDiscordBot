@@ -87,8 +87,11 @@ async def end(ctx):
         deb.reply = 'NA'
         deb.speaker = 'PM'
         deb.restart = False
-        sleep.cancel_all()
-        await asyncio.wait(sleep.tasks)
+        deb.speech = False
+        # If a speech is going on, stop all timers
+        if deb.speech == True:
+            sleep.cancel_all()
+            await asyncio.wait(sleep.tasks)
         await ctx.send(f"Debate has been ended by {ctx.author.mention}")
     else:
         await ctx.send("No debate going on")
@@ -155,7 +158,27 @@ async def restart_status(ctx):
     global deb
     await ctx.send(deb.restart)
 
-
+@client.command()
+async def stop(ctx):
+    global deb
+    global speakers
+    # Speech can be stopped only if one is going on
+    if deb.speech == True:
+        deb.restart = True
+        deb.speech = False
+        sleep.cancel_all()
+        index = speakers[deb.format].index(deb.speaker)
+        await asyncio.wait(sleep.tasks)
+        if index != len(speakers[deb.format]) - 1:
+            await ctx.send(f"{deb.speaker} has finished their speech")
+            deb.speaker = speakers[deb.format][index + 1]
+        elif index == len(speakers[deb.format]) - 1:
+            deb.status = False
+            deb.speaker = 'PM'
+            deb.format = 'NA'
+            deb.reply = 'NA'
+            await ctx.send("The debate has finished")
+        
 @client.command()
 async def status(ctx):
     global deb
