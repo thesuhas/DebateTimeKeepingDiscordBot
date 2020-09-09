@@ -112,13 +112,13 @@ async def speech(ctx):
                 await ctx.send(f"I now invite the {deb.speaker} for their speech")
                 deb.speech = True
                 index = speakers[deb.format].index(deb.speaker)
-                await sleep(5)
+                await sleep(60)
                 if deb.status == True and deb.restart == False:
                     await ctx.send("Protected time is done")
-                    await sleep(5)
+                    await sleep(5 * 60)
                     if deb.status == True and deb.restart == False:
                         await ctx.send("Protected time has started")
-                        await sleep(5)
+                        await sleep(80)
                         if deb.status == True and deb.restart == False:
                             await ctx.send("Time up!")
                             # Need to set speech to false after speech is done
