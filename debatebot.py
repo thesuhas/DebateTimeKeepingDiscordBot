@@ -196,6 +196,10 @@ async def status(ctx):
         embed = discord.Embed(title='Debate Status', colour=discord.Colour.red(), description='Finished/Has not started')
         await ctx.message.author.send(embed=embed)
 
+@client.command()
+async def paul(ctx):
+    await ctx.send("bhai kya bhai")
+
 
 sleep = make_sleep()
 client.run('NzUyODg5MzI2Mzc0ODc5MjU2.X1eM0w._JppyqlGEnZqDop2prNeJtYnPJs')
