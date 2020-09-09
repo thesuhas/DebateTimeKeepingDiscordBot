@@ -42,13 +42,15 @@ async def on_ready():
 @client.command(aliases=['h', "help"])
 async def _help(ctx):
     author = ctx.message.author
-    help_e = discord.Embed(title='Debate Time Keeper Bot', color=discord.Color.green())
-    name = ".start to start a debate\n.format {format} to set the debate format\n"
-    format = "Formats are AP and BP\n"
+    help_e = discord.Embed(color=discord.Color.green())
+    name = "`.start` to start a debate\n`.format {format}` to set the debate format\n`.speech` to start a speech\n`.restart` to restart a speech\n`.stop` to stop a speech before time has elapsed\n`.end` to end a debate before it has finished\n`.status` to check the status of a debate"
+    format = "Formats available are AP and BP\n"
     time = "Speaker time is 7:20 per person"
+    poi = "POIs can be asked from the 1st minute till the 6th minute"
     help_e.add_field(name='Commands', value=name, inline=False)
     help_e.add_field(name='Formats', value=format)
     help_e.add_field(name="Speaker Time", value=time)
+    help_e.add_field(name='POIs', value=poi)
     await author.send(embed=help_e)
 
 @client.command()
@@ -94,7 +96,7 @@ async def end(ctx):
             await asyncio.wait(sleep.tasks)
         await ctx.send(f"Debate has been ended by {ctx.author.mention}")
     else:
-        await ctx.send("No debate going on")
+        await ctx.send("No debate going on to end")
 
 @client.command()
 async def speech(ctx):
@@ -114,10 +116,10 @@ async def speech(ctx):
                 index = speakers[deb.format].index(deb.speaker)
                 await sleep(60)
                 if deb.status == True and deb.restart == False:
-                    await ctx.send("Protected time is done")
+                    await ctx.send("POIs can be asked")
                     await sleep(5 * 60)
                     if deb.status == True and deb.restart == False:
-                        await ctx.send("Protected time has started")
+                        await ctx.send("No more POIs")
                         await sleep(80)
                         if deb.status == True and deb.restart == False:
                             await ctx.send("Time up!")
@@ -191,7 +193,7 @@ async def status(ctx):
             embed.add_field(name='Format', value='To Be Set')
         await ctx.message.author.send(embed=embed)
     else:
-        embed = discord.Embed(title='Debate Status', colour=discord.Colour.red(), description='Not going on')
+        embed = discord.Embed(title='Debate Status', colour=discord.Colour.red(), description='Finished/Has not started')
         await ctx.message.author.send(embed=embed)
 
 
