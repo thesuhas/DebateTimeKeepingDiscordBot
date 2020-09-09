@@ -28,7 +28,7 @@ async def _help(ctx):
     name = ".start to start a debate\n.format {format} to set the debate format\n"
     format = "Formats are AP and BP\n"
     time = "Speaker time is 7:20 per person"
-    help_e.add_field(name='Description', value=name, inline=False)
+    help_e.add_field(name='Commands', value=name, inline=False)
     help_e.add_field(name='Formats', value=format)
     help_e.add_field(name="Speaker Time", value=time)
     await author.send(embed=help_e)
