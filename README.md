@@ -9,7 +9,7 @@ Starts the debate if one is not going on.
 Ends the debate if one is going on.
 
 ### .status
-DMs the status of the debate to the author. If a debate is going on, the status includes the Format and Current Speaker. >Will add protected time soon.
+DMs the status of the debate to the author. If a debate is going on, the status includes the Format and Current Speaker. Will add protected time soon.
 
 ### .format {format}
 Sets the format of the debate to either an AP or BP depending on the author's preference if a debate has started and the format has not already been set
