@@ -118,4 +118,4 @@ async def status(ctx):
         await ctx.message.author.send(embed=embed)
 
 
-client.run('NzUyODg5MzI2Mzc0ODc5MjU2.X1eM0w.7-oN3tzEguiGTDxfsyYNr6p53sU')
+client.run('NzUyODg5MzI2Mzc0ODc5MjU2.X1eM0w._JppyqlGEnZqDop2prNeJtYnPJs')
