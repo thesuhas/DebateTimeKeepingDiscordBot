@@ -37,7 +37,7 @@ async def on_ready():
     global deb
     global speakers
     deb = Debate()
-    speakers = {'BP': ['PM', 'LO', 'DPM', 'DLO', 'MG', 'OG', 'GW', 'OW'], 'AP': ['PM', 'LO', 'DPM', 'DLO', 'GW', 'OW']}
+    speakers = {'BP': ['PM', 'LO', 'DPM', 'DLO', 'MG', 'MO', 'GW', 'OW'], 'AP': ['PM', 'LO', 'DPM', 'DLO', 'GW', 'OW']}
 
 @client.command(aliases=['h', "help"])
 async def _help(ctx):
