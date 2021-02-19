@@ -202,4 +202,4 @@ async def paul(ctx):
 
 
 sleep = make_sleep()
-client.run('NzUyODg5MzI2Mzc0ODc5MjU2.X1eM0w._JppyqlGEnZqDop2prNeJtYnPJs')
+client.run('TOKEN')
